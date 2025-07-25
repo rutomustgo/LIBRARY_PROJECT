@@ -397,11 +397,6 @@ Summary Reports: Aggregated data on high-demand books and employee performance.
 Conclusion
 This project demonstrates the application of SQL skills in creating and managing a library management system. It includes database setup, data manipulation, and advanced querying, providing a solid foundation for data management and analysis.
 
-How to Use
-Clone the Repository: Clone this repository to your local machine.
-
-git clone https://github.com/najirh/Library-System-Management---P2.git
-Set Up the Database: Execute the SQL scripts in the database_setup.sql file to create and populate the database.
 
 Run the Queries: Use the SQL queries in the analysis_queries.sql file to perform the analysis.
 
