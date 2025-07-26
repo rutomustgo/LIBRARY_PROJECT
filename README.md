@@ -27,6 +27,7 @@ Table Creation: Created tables for branches, employees, members, books, issued s
 ```sql
 CREATE DATABASE library_db;
 
+```
 
 -- CREATING TABLES
 
@@ -40,6 +41,8 @@ CREATE TABLE branch
             branch_address VARCHAR(30),
             contact_no VARCHAR(15)
 );
+
+```
 
 
 -- Create table "Employee"
@@ -56,6 +59,8 @@ CREATE TABLE employees
             FOREIGN KEY (branch_id) REFERENCES  branch(branch_id)
 );
 
+```
+
 
 -- Create table "Members"
 
@@ -70,6 +75,7 @@ CREATE TABLE members
             reg_date DATE
 );
 
+```
 
 
 -- Create table "Books"
@@ -88,6 +94,7 @@ CREATE TABLE books
             publisher VARCHAR(30)
 );
 
+```
 
 
 -- Create table "IssueStatus"
@@ -108,7 +115,7 @@ CREATE TABLE issued_status
             FOREIGN KEY (issued_book_isbn) REFERENCES books(isbn) 
 );
 
-
+```
 
 -- Create table "ReturnStatus"
 
@@ -125,6 +132,7 @@ CREATE TABLE return_status
             FOREIGN KEY (return_book_isbn) REFERENCES books(isbn)
 );
 
+```
 
 
 2. CRUD Operations
@@ -143,6 +151,7 @@ INSERT INTO books(isbn, book_title, category, rental_price, status, author, publ
 VALUES('978-1-60129-456-2', 'To Kill a Mockingbird', 'Classic', 6.00, 'yes', 'Harper Lee', 'J.B. Lippincott & Co.');
 SELECT * FROM books;
 
+```
 
 
 Task 2: Update an Existing Member's Address
@@ -152,6 +161,7 @@ UPDATE members
 SET member_address = '125 Oak St'
 WHERE member_id = 'C103';
 
+```
 
 
 Task 3: Delete a Record from the Issued Status Table -- Objective: Delete the record with issued_id = 'IS121' from the issued_status table.
@@ -160,6 +170,7 @@ Task 3: Delete a Record from the Issued Status Table -- Objective: Delete the re
 DELETE FROM issued_status
 WHERE   issued_id =   'IS121';
 
+```
 
 
 Task 4: Retrieve All Books Issued by a Specific Employee -- Objective: Select all books issued by the employee with emp_id = 'E101'.
@@ -169,8 +180,11 @@ Task 4: Retrieve All Books Issued by a Specific Employee -- Objective: Select al
 SELECT * FROM issued_status
 WHERE issued_emp_id = 'E101'
 
+```
+
 
 Task 5: List Members Who Have Issued More Than One Book -- Objective: Use GROUP BY to find members who have issued more than one book.
+
 
 ```sql
 SELECT
@@ -180,6 +194,7 @@ FROM issued_status
 GROUP BY 1
 HAVING COUNT(*) > 1
 
+```
 
 
 3. CTAS (Create Table As Select)
@@ -196,6 +211,7 @@ JOIN books as b
 ON ist.issued_book_isbn = b.isbn
 GROUP BY b.isbn, b.book_title;
 
+```
 
 
 4. Data Analysis & Findings
@@ -206,6 +222,8 @@ Task 7. Retrieve All Books in a Specific Category:
 ```sql
 SELECT * FROM books
 WHERE category = 'Classic';
+
+```
 
 
 Task 8: Find Total Rental Income by Category:
@@ -223,6 +241,7 @@ books as b
 ON b.isbn = ist.issued_book_isbn
 GROUP BY 1
 
+```
 
 
 
@@ -232,6 +251,7 @@ List Members Who Registered in the Last 180 Days:
 SELECT * FROM members
 WHERE reg_date >= CURRENT_DATE - INTERVAL '180 days';
 
+```
 
 
 List Employees with Their Branch Manager's Name and their branch details:
@@ -253,6 +273,7 @@ JOIN
 employees as e2
 ON e2.emp_id = b.manager_id
 
+```
 
 
 Task 11. Create a Table of Books with Rental Price Above a Certain Threshold:
@@ -263,6 +284,7 @@ CREATE TABLE expensive_books AS
 SELECT * FROM books
 WHERE rental_price > 7.00;
 
+```
 
 
 Task 12: Retrieve the List of Books Not Yet Returned
@@ -275,7 +297,7 @@ return_status as rs
 ON rs.issued_id = ist.issued_id
 WHERE rs.return_id IS NULL;
 
-
+```
 
 
 Advanced SQL Operations
@@ -309,6 +331,7 @@ WHERE
     (CURRENT_DATE - ist.issued_date) > 30
 ORDER BY 1
 
+```
 
 
 Task 14: Update Book Status on Return
@@ -349,6 +372,9 @@ END;
 $$
 
 
+```
+
+
 -- Testing FUNCTION add_return_records
 
 
@@ -356,19 +382,29 @@ $$
 issued_id = IS135
 ISBN = WHERE isbn = '978-0-307-58837-1'
 
+```
+
+
 ```sql
 SELECT * FROM books
 WHERE isbn = '978-0-307-58837-1';
+
+```
 
 
 ```sql
 SELECT * FROM issued_status
 WHERE issued_book_isbn = '978-0-307-58837-1';
 
+```
+
 
 ```sql
 SELECT * FROM return_status
 WHERE issued_id = 'IS135';
+
+```
+
 
 
 -- calling function 
@@ -407,8 +443,15 @@ books as bk
 ON ist.issued_book_isbn = bk.isbn
 GROUP BY 1, 2;
 
+```
+
+
+
 ```sql
 SELECT * FROM branch_reports;
+
+```
+
 
 
 Task 16: CTAS: Create a Table of Active Members
@@ -426,6 +469,12 @@ WHERE member_id IN (SELECT
                         issued_date >= CURRENT_DATE - INTERVAL '2 month'
                     )
 ;
+
+
+```
+
+
+
 
 SELECT * FROM active_members;
 
@@ -447,6 +496,9 @@ JOIN
 branch as b
 ON e.branch_id = b.branch_id
 GROUP BY 1, 2
+
+```
+
 
 
 Task 18: Identify Members Issuing High-Risk Books
@@ -493,6 +545,7 @@ BEGIN
 END;
 $$
 
+```
 -- Testing The function
 SELECT * FROM books;
 -- "978-0-553-29698-2" -- yes
@@ -502,8 +555,13 @@ SELECT * FROM issued_status;
 CALL issue_book('IS155', 'C108', '978-0-553-29698-2', 'E104');
 CALL issue_book('IS156', 'C108', '978-0-375-41398-8', 'E104');
 
+
+
+```sql
 SELECT * FROM books
 WHERE isbn = '978-0-375-41398-8'
+
+```
 Task 20: Create Table As Select (CTAS) Objective: Create a CTAS (Create Table As Select) query to identify overdue books and calculate fines.
 
 Description: Write a CTAS query to create a new table that lists each member and the books they have issued but not returned within 30 days. The table should include: The number of overdue books. The total fines, with each day's fine calculated at $0.50. The number of books issued by each member. The resulting table should show: Member ID Number of overdue books Total fines
